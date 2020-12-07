@@ -9,11 +9,18 @@ cmake_minimum_required(VERSION 3.10)
 project(adftools VERSION 0.3 LANGUAGES C)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/build)
+set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR})
 
 if (DEFINED CMAKE_BUILD_TYPE)
-	message(STATUS "Build type define as ${CMAKE_BUILD_TYPE}")
-	if (CMAKE_BUILD_TYPE MATCHES Release)
-		set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3")
+	if (CMAKE_BUILD_TYPE STREQUAL "")
+		message("Defaulting to Debug")
+		set(CMAKE_BUILD_TYPE Debug)
+	endif()
+
+	message("Build type define as ${CMAKE_BUILD_TYPE}")
+	
+	if (CMAKE_BUILD_TYPE STREQUAL "Release")
+		set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O")
 	else()
 		set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g")
 	endif()
@@ -62,3 +69,13 @@ target_include_directories(adfdump 	PUBLIC "${PROJECT_BINARY_DIR}" "${PROJECT_SO
 target_include_directories(adfinfo 	PUBLIC "${PROJECT_BINARY_DIR}" "${PROJECT_SOURCE_DIR}" "${PROJECT_SOURCE_DIR}/adflib")
 target_include_directories(adflist 	PUBLIC "${PROJECT_BINARY_DIR}" "${PROJECT_SOURCE_DIR}" "${PROJECT_SOURCE_DIR}/adflib")
 
+# To install use 'cmake --install . --prefix "path-of-your-choice"'
+install(TARGETS adfcopy		DESTINATION bin)
+install(TARGETS adfdelete	DESTINATION bin)
+install(TARGETS adfextract	DESTINATION bin)
+install(TARGETS adfinstall	DESTINATION bin)
+install(TARGETS adfmakedir	DESTINATION bin)
+install(TARGETS adfcreate	DESTINATION bin)
+install(TARGETS adfdump		DESTINATION bin)
+install(TARGETS adfinfo		DESTINATION bin)
+install(TARGETS adflist		DESTINATION bin)
